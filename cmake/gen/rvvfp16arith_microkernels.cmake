@@ -9,12 +9,26 @@
 #   Generator: tools/update-microkernels.py
 
 
-SET(PROD_RVVFP16ARITH_MICROKERNEL_SRCS)
+SET(PROD_RVVFP16ARITH_MICROKERNEL_SRCS
+  src/f16-dwconv/gen/f16-dwconv-3p8vc-minmax-rvvfp16arith.c
+  src/f16-dwconv/gen/f16-dwconv-4p8vc-minmax-rvvfp16arith.c
+  src/f16-dwconv/gen/f16-dwconv-9p8vc-minmax-rvvfp16arith.c
+  src/f16-dwconv/gen/f16-dwconv-25p8vc-minmax-rvvfp16arith.c
+  src/f16-gemm/gen/f16-gemm-1x4v-minmax-rvvfp16arith.c
+  src/f16-gemm/gen/f16-gemm-7x4v-minmax-rvvfp16arith.c
+  src/f16-igemm/gen/f16-igemm-1x4v-minmax-rvvfp16arith.c
+  src/f16-igemm/gen/f16-igemm-7x4v-minmax-rvvfp16arith.c)
 
 SET(NON_PROD_RVVFP16ARITH_MICROKERNEL_SRCS
+  src/f16-dwconv/gen/f16-dwconv-3p4vc-minmax-rvvfp16arith.c
+  src/f16-dwconv/gen/f16-dwconv-4p4vc-minmax-rvvfp16arith.c
+  src/f16-dwconv/gen/f16-dwconv-9p4vc-minmax-rvvfp16arith.c
+  src/f16-dwconv/gen/f16-dwconv-25p4vc-minmax-rvvfp16arith.c
   src/f16-f32-vcvt/gen/f16-f32-vcvt-rvvfp16arith-u1v.c
   src/f16-f32-vcvt/gen/f16-f32-vcvt-rvvfp16arith-u2v.c
   src/f16-f32-vcvt/gen/f16-f32-vcvt-rvvfp16arith-u4v.c
+  src/f16-gemm/gen/f16-gemm-4x4v-minmax-rvvfp16arith.c
+  src/f16-igemm/gen/f16-igemm-4x4v-minmax-rvvfp16arith.c
   src/f16-vclamp/gen/f16-vclamp-rvvfp16arith-u1v.c
   src/f16-vclamp/gen/f16-vclamp-rvvfp16arith-u2v.c
   src/f16-vclamp/gen/f16-vclamp-rvvfp16arith-u4v.c

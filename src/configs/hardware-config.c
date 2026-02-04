@@ -293,7 +293,7 @@ static void init_hardware_config(void) {
     set_arch_flag(xnn_arch_riscv_vector, use_riscv_vector);
 
     /* There is no HWCAP for fp16 so disable by default */
-    set_arch_flag(xnn_arch_riscv_vector_fp16_arith, false);
+    set_arch_flag(xnn_arch_riscv_vector_fp16_arith, use_riscv_vector);
 
     if (use_riscv_vector) {
       register uint32_t vlenb __asm__ ("t0");
