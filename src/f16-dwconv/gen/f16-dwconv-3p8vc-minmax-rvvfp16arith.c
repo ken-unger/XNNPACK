@@ -28,31 +28,31 @@ void xnn_f16_dwconv_minmax_ukernel_3p8vc__rvvfp16arith(
   assert(channels != 0);
   assert(output_width != 0);
 
-  _Float16 vmin = *(const _Float16*) &params->scalar.min;
-  _Float16 vmax = *(const _Float16*) &params->scalar.max;
-  _Float16* o = (_Float16*) output;
+  const xnn_float16 vmin = params->scalar.min;
+  const xnn_float16 vmax = params->scalar.max;
+  xnn_float16* o = output;
 
   do {
-    const _Float16* i0 = (const _Float16*) input[0];
+    const xnn_float16* i0 = input[0];
     assert(i0 != NULL);
-    if XNN_UNPREDICTABLE(i0 != (const _Float16*) zero) {
-      i0 = (const _Float16*) ((uintptr_t) i0 + input_offset);
+    if XNN_UNPREDICTABLE(i0 != (const xnn_float16*) zero) {
+      i0 = (const xnn_float16*) ((uintptr_t) i0 + input_offset);
     }
-    const _Float16* i1 = (const _Float16*) input[1];
+    const xnn_float16* i1 = input[1];
     assert(i1 != NULL);
-    if XNN_UNPREDICTABLE(i1 != (const _Float16*) zero) {
-      i1 = (const _Float16*) ((uintptr_t) i1 + input_offset);
+    if XNN_UNPREDICTABLE(i1 != (const xnn_float16*) zero) {
+      i1 = (const xnn_float16*) ((uintptr_t) i1 + input_offset);
     }
-    const _Float16* i2 = (const _Float16*) input[2];
+    const xnn_float16* i2 = input[2];
     assert(i2 != NULL);
-    if XNN_UNPREDICTABLE(i2 != (const _Float16*) zero) {
-      i2 = (const _Float16*) ((uintptr_t) i2 + input_offset);
+    if XNN_UNPREDICTABLE(i2 != (const xnn_float16*) zero) {
+      i2 = (const xnn_float16*) ((uintptr_t) i2 + input_offset);
     }
 
     input = (const xnn_float16**) ((uintptr_t) input + input_stride);
 
     size_t c = channels;
-    const _Float16* w = (const _Float16*) weights;
+    const xnn_float16* w = weights;
     const size_t vlmax = __riscv_vsetvlmax_e16m8();
 
     do {
@@ -85,6 +85,6 @@ void xnn_f16_dwconv_minmax_ukernel_3p8vc__rvvfp16arith(
       c -= vl;
     } while(c != 0);
     input_offset += input_pixel_stride;
-    o = (_Float16*) ((uintptr_t) o + output_increment);
+    o = (xnn_float16*) ((uintptr_t) o + output_increment);
   } while (--output_width != 0);
 }

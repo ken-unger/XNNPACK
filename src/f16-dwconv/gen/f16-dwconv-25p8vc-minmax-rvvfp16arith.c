@@ -28,141 +28,141 @@ void xnn_f16_dwconv_minmax_ukernel_25p8vc__rvvfp16arith(
   assert(channels != 0);
   assert(output_width != 0);
 
-  _Float16 vmin = *(const _Float16*) &params->scalar.min;
-  _Float16 vmax = *(const _Float16*) &params->scalar.max;
-  _Float16* o = (_Float16*) output;
+  const xnn_float16 vmin = params->scalar.min;
+  const xnn_float16 vmax = params->scalar.max;
+  xnn_float16* o = output;
 
   do {
-    const _Float16* i0 = (const _Float16*) input[0];
+    const xnn_float16* i0 = input[0];
     assert(i0 != NULL);
-    if XNN_UNPREDICTABLE(i0 != (const _Float16*) zero) {
-      i0 = (const _Float16*) ((uintptr_t) i0 + input_offset);
+    if XNN_UNPREDICTABLE(i0 != (const xnn_float16*) zero) {
+      i0 = (const xnn_float16*) ((uintptr_t) i0 + input_offset);
     }
-    const _Float16* i1 = (const _Float16*) input[1];
+    const xnn_float16* i1 = input[1];
     assert(i1 != NULL);
-    if XNN_UNPREDICTABLE(i1 != (const _Float16*) zero) {
-      i1 = (const _Float16*) ((uintptr_t) i1 + input_offset);
+    if XNN_UNPREDICTABLE(i1 != (const xnn_float16*) zero) {
+      i1 = (const xnn_float16*) ((uintptr_t) i1 + input_offset);
     }
-    const _Float16* i2 = (const _Float16*) input[2];
+    const xnn_float16* i2 = input[2];
     assert(i2 != NULL);
-    if XNN_UNPREDICTABLE(i2 != (const _Float16*) zero) {
-      i2 = (const _Float16*) ((uintptr_t) i2 + input_offset);
+    if XNN_UNPREDICTABLE(i2 != (const xnn_float16*) zero) {
+      i2 = (const xnn_float16*) ((uintptr_t) i2 + input_offset);
     }
-    const _Float16* i3 = (const _Float16*) input[3];
+    const xnn_float16* i3 = input[3];
     assert(i3 != NULL);
-    if XNN_UNPREDICTABLE(i3 != (const _Float16*) zero) {
-      i3 = (const _Float16*) ((uintptr_t) i3 + input_offset);
+    if XNN_UNPREDICTABLE(i3 != (const xnn_float16*) zero) {
+      i3 = (const xnn_float16*) ((uintptr_t) i3 + input_offset);
     }
-    const _Float16* i4 = (const _Float16*) input[4];
+    const xnn_float16* i4 = input[4];
     assert(i4 != NULL);
-    if XNN_UNPREDICTABLE(i4 != (const _Float16*) zero) {
-      i4 = (const _Float16*) ((uintptr_t) i4 + input_offset);
+    if XNN_UNPREDICTABLE(i4 != (const xnn_float16*) zero) {
+      i4 = (const xnn_float16*) ((uintptr_t) i4 + input_offset);
     }
-    const _Float16* i5 = (const _Float16*) input[5];
+    const xnn_float16* i5 = input[5];
     assert(i5 != NULL);
-    if XNN_UNPREDICTABLE(i5 != (const _Float16*) zero) {
-      i5 = (const _Float16*) ((uintptr_t) i5 + input_offset);
+    if XNN_UNPREDICTABLE(i5 != (const xnn_float16*) zero) {
+      i5 = (const xnn_float16*) ((uintptr_t) i5 + input_offset);
     }
-    const _Float16* i6 = (const _Float16*) input[6];
+    const xnn_float16* i6 = input[6];
     assert(i6 != NULL);
-    if XNN_UNPREDICTABLE(i6 != (const _Float16*) zero) {
-      i6 = (const _Float16*) ((uintptr_t) i6 + input_offset);
+    if XNN_UNPREDICTABLE(i6 != (const xnn_float16*) zero) {
+      i6 = (const xnn_float16*) ((uintptr_t) i6 + input_offset);
     }
-    const _Float16* i7 = (const _Float16*) input[7];
+    const xnn_float16* i7 = input[7];
     assert(i7 != NULL);
-    if XNN_UNPREDICTABLE(i7 != (const _Float16*) zero) {
-      i7 = (const _Float16*) ((uintptr_t) i7 + input_offset);
+    if XNN_UNPREDICTABLE(i7 != (const xnn_float16*) zero) {
+      i7 = (const xnn_float16*) ((uintptr_t) i7 + input_offset);
     }
-    const _Float16* i8 = (const _Float16*) input[8];
+    const xnn_float16* i8 = input[8];
     assert(i8 != NULL);
-    if XNN_UNPREDICTABLE(i8 != (const _Float16*) zero) {
-      i8 = (const _Float16*) ((uintptr_t) i8 + input_offset);
+    if XNN_UNPREDICTABLE(i8 != (const xnn_float16*) zero) {
+      i8 = (const xnn_float16*) ((uintptr_t) i8 + input_offset);
     }
-    const _Float16* i9 = (const _Float16*) input[9];
+    const xnn_float16* i9 = input[9];
     assert(i9 != NULL);
-    if XNN_UNPREDICTABLE(i9 != (const _Float16*) zero) {
-      i9 = (const _Float16*) ((uintptr_t) i9 + input_offset);
+    if XNN_UNPREDICTABLE(i9 != (const xnn_float16*) zero) {
+      i9 = (const xnn_float16*) ((uintptr_t) i9 + input_offset);
     }
-    const _Float16* i10 = (const _Float16*) input[10];
+    const xnn_float16* i10 = input[10];
     assert(i10 != NULL);
-    if XNN_UNPREDICTABLE(i10 != (const _Float16*) zero) {
-      i10 = (const _Float16*) ((uintptr_t) i10 + input_offset);
+    if XNN_UNPREDICTABLE(i10 != (const xnn_float16*) zero) {
+      i10 = (const xnn_float16*) ((uintptr_t) i10 + input_offset);
     }
-    const _Float16* i11 = (const _Float16*) input[11];
+    const xnn_float16* i11 = input[11];
     assert(i11 != NULL);
-    if XNN_UNPREDICTABLE(i11 != (const _Float16*) zero) {
-      i11 = (const _Float16*) ((uintptr_t) i11 + input_offset);
+    if XNN_UNPREDICTABLE(i11 != (const xnn_float16*) zero) {
+      i11 = (const xnn_float16*) ((uintptr_t) i11 + input_offset);
     }
-    const _Float16* i12 = (const _Float16*) input[12];
+    const xnn_float16* i12 = input[12];
     assert(i12 != NULL);
-    if XNN_UNPREDICTABLE(i12 != (const _Float16*) zero) {
-      i12 = (const _Float16*) ((uintptr_t) i12 + input_offset);
+    if XNN_UNPREDICTABLE(i12 != (const xnn_float16*) zero) {
+      i12 = (const xnn_float16*) ((uintptr_t) i12 + input_offset);
     }
-    const _Float16* i13 = (const _Float16*) input[13];
+    const xnn_float16* i13 = input[13];
     assert(i13 != NULL);
-    if XNN_UNPREDICTABLE(i13 != (const _Float16*) zero) {
-      i13 = (const _Float16*) ((uintptr_t) i13 + input_offset);
+    if XNN_UNPREDICTABLE(i13 != (const xnn_float16*) zero) {
+      i13 = (const xnn_float16*) ((uintptr_t) i13 + input_offset);
     }
-    const _Float16* i14 = (const _Float16*) input[14];
+    const xnn_float16* i14 = input[14];
     assert(i14 != NULL);
-    if XNN_UNPREDICTABLE(i14 != (const _Float16*) zero) {
-      i14 = (const _Float16*) ((uintptr_t) i14 + input_offset);
+    if XNN_UNPREDICTABLE(i14 != (const xnn_float16*) zero) {
+      i14 = (const xnn_float16*) ((uintptr_t) i14 + input_offset);
     }
-    const _Float16* i15 = (const _Float16*) input[15];
+    const xnn_float16* i15 = input[15];
     assert(i15 != NULL);
-    if XNN_UNPREDICTABLE(i15 != (const _Float16*) zero) {
-      i15 = (const _Float16*) ((uintptr_t) i15 + input_offset);
+    if XNN_UNPREDICTABLE(i15 != (const xnn_float16*) zero) {
+      i15 = (const xnn_float16*) ((uintptr_t) i15 + input_offset);
     }
-    const _Float16* i16 = (const _Float16*) input[16];
+    const xnn_float16* i16 = input[16];
     assert(i16 != NULL);
-    if XNN_UNPREDICTABLE(i16 != (const _Float16*) zero) {
-      i16 = (const _Float16*) ((uintptr_t) i16 + input_offset);
+    if XNN_UNPREDICTABLE(i16 != (const xnn_float16*) zero) {
+      i16 = (const xnn_float16*) ((uintptr_t) i16 + input_offset);
     }
-    const _Float16* i17 = (const _Float16*) input[17];
+    const xnn_float16* i17 = input[17];
     assert(i17 != NULL);
-    if XNN_UNPREDICTABLE(i17 != (const _Float16*) zero) {
-      i17 = (const _Float16*) ((uintptr_t) i17 + input_offset);
+    if XNN_UNPREDICTABLE(i17 != (const xnn_float16*) zero) {
+      i17 = (const xnn_float16*) ((uintptr_t) i17 + input_offset);
     }
-    const _Float16* i18 = (const _Float16*) input[18];
+    const xnn_float16* i18 = input[18];
     assert(i18 != NULL);
-    if XNN_UNPREDICTABLE(i18 != (const _Float16*) zero) {
-      i18 = (const _Float16*) ((uintptr_t) i18 + input_offset);
+    if XNN_UNPREDICTABLE(i18 != (const xnn_float16*) zero) {
+      i18 = (const xnn_float16*) ((uintptr_t) i18 + input_offset);
     }
-    const _Float16* i19 = (const _Float16*) input[19];
+    const xnn_float16* i19 = input[19];
     assert(i19 != NULL);
-    if XNN_UNPREDICTABLE(i19 != (const _Float16*) zero) {
-      i19 = (const _Float16*) ((uintptr_t) i19 + input_offset);
+    if XNN_UNPREDICTABLE(i19 != (const xnn_float16*) zero) {
+      i19 = (const xnn_float16*) ((uintptr_t) i19 + input_offset);
     }
-    const _Float16* i20 = (const _Float16*) input[20];
+    const xnn_float16* i20 = input[20];
     assert(i20 != NULL);
-    if XNN_UNPREDICTABLE(i20 != (const _Float16*) zero) {
-      i20 = (const _Float16*) ((uintptr_t) i20 + input_offset);
+    if XNN_UNPREDICTABLE(i20 != (const xnn_float16*) zero) {
+      i20 = (const xnn_float16*) ((uintptr_t) i20 + input_offset);
     }
-    const _Float16* i21 = (const _Float16*) input[21];
+    const xnn_float16* i21 = input[21];
     assert(i21 != NULL);
-    if XNN_UNPREDICTABLE(i21 != (const _Float16*) zero) {
-      i21 = (const _Float16*) ((uintptr_t) i21 + input_offset);
+    if XNN_UNPREDICTABLE(i21 != (const xnn_float16*) zero) {
+      i21 = (const xnn_float16*) ((uintptr_t) i21 + input_offset);
     }
-    const _Float16* i22 = (const _Float16*) input[22];
+    const xnn_float16* i22 = input[22];
     assert(i22 != NULL);
-    if XNN_UNPREDICTABLE(i22 != (const _Float16*) zero) {
-      i22 = (const _Float16*) ((uintptr_t) i22 + input_offset);
+    if XNN_UNPREDICTABLE(i22 != (const xnn_float16*) zero) {
+      i22 = (const xnn_float16*) ((uintptr_t) i22 + input_offset);
     }
-    const _Float16* i23 = (const _Float16*) input[23];
+    const xnn_float16* i23 = input[23];
     assert(i23 != NULL);
-    if XNN_UNPREDICTABLE(i23 != (const _Float16*) zero) {
-      i23 = (const _Float16*) ((uintptr_t) i23 + input_offset);
+    if XNN_UNPREDICTABLE(i23 != (const xnn_float16*) zero) {
+      i23 = (const xnn_float16*) ((uintptr_t) i23 + input_offset);
     }
-    const _Float16* i24 = (const _Float16*) input[24];
+    const xnn_float16* i24 = input[24];
     assert(i24 != NULL);
-    if XNN_UNPREDICTABLE(i24 != (const _Float16*) zero) {
-      i24 = (const _Float16*) ((uintptr_t) i24 + input_offset);
+    if XNN_UNPREDICTABLE(i24 != (const xnn_float16*) zero) {
+      i24 = (const xnn_float16*) ((uintptr_t) i24 + input_offset);
     }
 
     input = (const xnn_float16**) ((uintptr_t) input + input_stride);
 
     size_t c = channels;
-    const _Float16* w = (const _Float16*) weights;
+    const xnn_float16* w = weights;
     const size_t vlmax = __riscv_vsetvlmax_e16m8();
 
     do {
@@ -305,6 +305,6 @@ void xnn_f16_dwconv_minmax_ukernel_25p8vc__rvvfp16arith(
       c -= vl;
     } while(c != 0);
     input_offset += input_pixel_stride;
-    o = (_Float16*) ((uintptr_t) o + output_increment);
+    o = (xnn_float16*) ((uintptr_t) o + output_increment);
   } while (--output_width != 0);
 }

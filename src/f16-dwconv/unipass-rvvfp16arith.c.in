@@ -26,22 +26,22 @@ void xnn_f16_dwconv_minmax_ukernel_${KERNEL_TILE}p${LMUL}vc__rvvfp16arith(
   assert(channels != 0);
   assert(output_width != 0);
 
-  _Float16 vmin = *(const _Float16*) &params->scalar.min;
-  _Float16 vmax = *(const _Float16*) &params->scalar.max;
-  _Float16* o = (_Float16*) output;
+  const xnn_float16 vmin = params->scalar.min;
+  const xnn_float16 vmax = params->scalar.max;
+  xnn_float16* o = output;
 
   do {
     $for K in range(KERNEL_TILE):
-      const _Float16* i${K} = (const _Float16*) input[${K}];
+      const xnn_float16* i${K} = input[${K}];
       assert(i${K} != NULL);
-      if XNN_UNPREDICTABLE(i${K} != (const _Float16*) zero) {
-        i${K} = (const _Float16*) ((uintptr_t) i${K} + input_offset);
+      if XNN_UNPREDICTABLE(i${K} != (const xnn_float16*) zero) {
+        i${K} = (const xnn_float16*) ((uintptr_t) i${K} + input_offset);
       }
 
     input = (const xnn_float16**) ((uintptr_t) input + input_stride);
 
     size_t c = channels;
-    const _Float16* w = (const _Float16*) weights;
+    const xnn_float16* w = weights;
     const size_t vlmax = __riscv_vsetvlmax_e16m${LMUL}();
 
     do {
@@ -65,6 +65,6 @@ void xnn_f16_dwconv_minmax_ukernel_${KERNEL_TILE}p${LMUL}vc__rvvfp16arith(
       c -= vl;
     } while(c != 0);
     input_offset += input_pixel_stride;
-    o = (_Float16*) ((uintptr_t) o + output_increment);
+    o = (xnn_float16*) ((uintptr_t) o + output_increment);
   } while (--output_width != 0);
 }

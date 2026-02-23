@@ -14,6 +14,13 @@ PROD_RVVFP16ARITH_MICROKERNEL_SRCS = [
     "src/f16-gemm/gen/f16-gemm-7x4v-minmax-rvvfp16arith.c",
     "src/f16-igemm/gen/f16-igemm-1x4v-minmax-rvvfp16arith.c",
     "src/f16-igemm/gen/f16-igemm-7x4v-minmax-rvvfp16arith.c",
+    "src/f16-spmm/gen/f16-spmm-8vx1-minmax-rvvfp16arith.c",
+    "src/qd8-f16-qc4w-gemm/gen/qd8-f16-qc4w-gemm-1x4v-minmax-rvvfp16arith.c",
+    "src/qd8-f16-qc4w-gemm/gen/qd8-f16-qc4w-gemm-7x4v-minmax-rvvfp16arith.c",
+    "src/qd8-f16-qc8w-gemm/gen/qd8-f16-qc8w-gemm-1x4v-minmax-rvvfp16arith.c",
+    "src/qd8-f16-qc8w-gemm/gen/qd8-f16-qc8w-gemm-7x4v-minmax-rvvfp16arith.c",
+    "src/qd8-f16-qc8w-igemm/gen/qd8-f16-qc8w-igemm-1x4v-minmax-rvvfp16arith.c",
+    "src/qd8-f16-qc8w-igemm/gen/qd8-f16-qc8w-igemm-7x4v-minmax-rvvfp16arith.c",
 ]
 
 NON_PROD_RVVFP16ARITH_MICROKERNEL_SRCS = [
@@ -26,6 +33,9 @@ NON_PROD_RVVFP16ARITH_MICROKERNEL_SRCS = [
     "src/f16-f32-vcvt/gen/f16-f32-vcvt-rvvfp16arith-u4v.c",
     "src/f16-gemm/gen/f16-gemm-4x4v-minmax-rvvfp16arith.c",
     "src/f16-igemm/gen/f16-igemm-4x4v-minmax-rvvfp16arith.c",
+    "src/f16-spmm/gen/f16-spmm-1vx1-minmax-rvvfp16arith.c",
+    "src/f16-spmm/gen/f16-spmm-2vx1-minmax-rvvfp16arith.c",
+    "src/f16-spmm/gen/f16-spmm-4vx1-minmax-rvvfp16arith.c",
     "src/f16-vclamp/gen/f16-vclamp-rvvfp16arith-u1v.c",
     "src/f16-vclamp/gen/f16-vclamp-rvvfp16arith-u2v.c",
     "src/f16-vclamp/gen/f16-vclamp-rvvfp16arith-u4v.c",
@@ -34,12 +44,9 @@ NON_PROD_RVVFP16ARITH_MICROKERNEL_SRCS = [
     "src/f32-f16-vcvt/gen/f32-f16-vcvt-rvvfp16arith-u2v.c",
     "src/f32-f16-vcvt/gen/f32-f16-vcvt-rvvfp16arith-u4v.c",
     "src/f32-f16-vcvt/gen/f32-f16-vcvt-rvvfp16arith-u8v.c",
-    "src/qd8-f16-qc4w-gemm/gen/qd8-f16-qc4w-gemm-1x4v-minmax-rvvfp16arith.c",
     "src/qd8-f16-qc4w-gemm/gen/qd8-f16-qc4w-gemm-4x4v-minmax-rvvfp16arith.c",
-    "src/qd8-f16-qc4w-gemm/gen/qd8-f16-qc4w-gemm-7x4v-minmax-rvvfp16arith.c",
-    "src/qd8-f16-qc8w-gemm/gen/qd8-f16-qc8w-gemm-1x4v-minmax-rvvfp16arith.c",
     "src/qd8-f16-qc8w-gemm/gen/qd8-f16-qc8w-gemm-4x4v-minmax-rvvfp16arith.c",
-    "src/qd8-f16-qc8w-gemm/gen/qd8-f16-qc8w-gemm-7x4v-minmax-rvvfp16arith.c",
+    "src/qd8-f16-qc8w-igemm/gen/qd8-f16-qc8w-igemm-4x4v-minmax-rvvfp16arith.c",
 ]
 
 ALL_RVVFP16ARITH_MICROKERNEL_SRCS = PROD_RVVFP16ARITH_MICROKERNEL_SRCS + NON_PROD_RVVFP16ARITH_MICROKERNEL_SRCS

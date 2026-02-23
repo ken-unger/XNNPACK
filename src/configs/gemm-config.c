@@ -2256,6 +2256,18 @@ static void init_qd8_f16_qc4w_gemm_config(void) {
         qd8_f16_qc4w_gemm_config.nr = 16;
         qd8_f16_qc4w_gemm_config.planes = 2;
     }
+  #elif XNN_ARCH_RISCV && XNN_ENABLE_RISCV_VECTOR && XNN_ENABLE_RISCV_FP16_VECTOR
+    const struct xnn_hardware_config* hardware_config = xnn_init_hardware_config();
+    assert(hardware_config != NULL);
+    (void) hardware_config;  // May be unused.
+    if (hardware_config->arch_flags & xnn_arch_riscv_vector_fp16_arith) {
+        qd8_f16_qc4w_gemm_config.minmax.dqgemm[XNN_MR_TO_INDEX(1)] = XNN_INIT_HMP_DQGEMM_UKERNEL(xnn_qd8_f16_qc4w_gemm_minmax_ukernel_1x4v__rvvfp16arith);
+        qd8_f16_qc4w_gemm_config.minmax.dqgemm[XNN_MR_TO_INDEX(7)] = XNN_INIT_HMP_DQGEMM_UKERNEL(xnn_qd8_f16_qc4w_gemm_minmax_ukernel_7x4v__rvvfp16arith);
+        qd8_f16_qc4w_gemm_config.init.f16_qc4w = xnn_init_f16_qc4w_minmax_scalar_params;
+        qd8_f16_qc4w_gemm_config.mr = 7;
+        qd8_f16_qc4w_gemm_config.nr = 2 * hardware_config->vlenb / sizeof(uint16_t); //
+        qd8_f16_qc4w_gemm_config.planes = 2;
+    }
   #endif
   assert(qd8_f16_qc4w_gemm_config.mr <= XNN_MAX_MR);
   assert(qd8_f16_qc4w_gemm_config.mr <= (XNN_EXTRA_QUANTIZATION_PARAMS + 1));
@@ -3205,6 +3217,17 @@ static void init_qd8_f16_qc8w_gemm_config(void) {
         qd8_f16_qc8w_gemm_config.log2_kr = 3;
       }
     #endif
+  #elif XNN_ARCH_RISCV && XNN_ENABLE_RISCV_VECTOR && XNN_ENABLE_RISCV_FP16_VECTOR
+    const struct xnn_hardware_config* hardware_config = xnn_init_hardware_config();
+    assert(hardware_config != NULL);
+    (void) hardware_config;  // May be unused.
+    if (hardware_config->arch_flags & xnn_arch_riscv_vector_fp16_arith) {
+        qd8_f16_qc8w_gemm_config.minmax.dqgemm[XNN_MR_TO_INDEX(1)] = XNN_INIT_HMP_DQGEMM_UKERNEL(xnn_qd8_f16_qc8w_gemm_minmax_ukernel_1x4v__rvvfp16arith);
+        qd8_f16_qc8w_gemm_config.minmax.dqgemm[XNN_MR_TO_INDEX(7)] = XNN_INIT_HMP_DQGEMM_UKERNEL(xnn_qd8_f16_qc8w_gemm_minmax_ukernel_7x4v__rvvfp16arith);
+        qd8_f16_qc8w_gemm_config.init.f16 = xnn_init_f16_minmax_scalar_params;
+        qd8_f16_qc8w_gemm_config.mr = 7;
+        qd8_f16_qc8w_gemm_config.nr = 2 * hardware_config->vlenb / sizeof(uint16_t); // 4
+    }
   #endif
   assert(qd8_f16_qc8w_gemm_config.mr <= XNN_MAX_MR);
   assert(qd8_f16_qc8w_gemm_config.mr <= (XNN_EXTRA_QUANTIZATION_PARAMS + 1));
@@ -3549,6 +3572,18 @@ static void init_qd8_f16_qc8w_igemm_config(void) {
         qd8_f16_qc8w_igemm_config.log2_kr = 3;
       }
     #endif
+
+  #elif XNN_ARCH_RISCV && XNN_ENABLE_RISCV_VECTOR && XNN_ENABLE_RISCV_FP16_VECTOR
+    const struct xnn_hardware_config* hardware_config = xnn_init_hardware_config();
+    assert(hardware_config != NULL);
+    (void) hardware_config;  // May be unused.
+    if (hardware_config->arch_flags & xnn_arch_riscv_vector_fp16_arith) {
+        qd8_f16_qc8w_igemm_config.minmax.dqigemm[XNN_MR_TO_INDEX(1)] = XNN_INIT_HMP_DQIGEMM_UKERNEL(xnn_qd8_f16_qc8w_igemm_minmax_ukernel_1x4v__rvvfp16arith);
+        qd8_f16_qc8w_igemm_config.minmax.dqigemm[XNN_MR_TO_INDEX(7)] = XNN_INIT_HMP_DQIGEMM_UKERNEL(xnn_qd8_f16_qc8w_igemm_minmax_ukernel_7x4v__rvvfp16arith);
+        qd8_f16_qc8w_igemm_config.init.f16 = xnn_init_f16_minmax_scalar_params;
+        qd8_f16_qc8w_igemm_config.mr = 7;
+        qd8_f16_qc8w_igemm_config.nr = 2 * hardware_config->vlenb / sizeof(uint16_t);  // 4
+    }
   #endif
   assert(qd8_f16_qc8w_igemm_config.mr <= XNN_MAX_MR);
   assert(qd8_f16_qc8w_igemm_config.mr <= (XNN_EXTRA_QUANTIZATION_PARAMS + 1));
