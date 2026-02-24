@@ -30,30 +30,30 @@ void xnn_f16_gemm_minmax_ukernel_4x4v__rvvfp16arith(
   assert(mr <= 4);
   assert(nc != 0);
   assert(kc != 0);
-  assert(kc % sizeof(_Float16) == 0);
+  assert(kc % sizeof(xnn_float16) == 0);
   assert(a != NULL);
   assert(w != NULL);
   assert(c != NULL);
 
-  _Float16 vmin = *(const _Float16*) &params->scalar.min;
-  _Float16 vmax = *(const _Float16*) &params->scalar.max;
+  const xnn_float16 vmin = params->scalar.min;
+  const xnn_float16 vmax = params->scalar.max;
 
-  const _Float16* a0 = (const _Float16*) a;
-  _Float16* c0 = (_Float16*) c;
-  const _Float16* a1 = (const _Float16*) ((uintptr_t) a0 + a_stride);
-  _Float16* c1 = (_Float16*) ((uintptr_t) c0 + cm_stride);
+  const xnn_float16* a0 = a;
+  xnn_float16* c0 = c;
+  const xnn_float16* a1 = (const xnn_float16*) ((uintptr_t) a0 + a_stride);
+  xnn_float16* c1 = (xnn_float16*) ((uintptr_t) c0 + cm_stride);
   if XNN_UNPREDICTABLE(mr < 2) {
     a1 = a0;
     c1 = c0;
   }
-  const _Float16* a2 = (const _Float16*) ((uintptr_t) a1 + a_stride);
-  _Float16* c2 = (_Float16*) ((uintptr_t) c1 + cm_stride);
+  const xnn_float16* a2 = (const xnn_float16*) ((uintptr_t) a1 + a_stride);
+  xnn_float16* c2 = (xnn_float16*) ((uintptr_t) c1 + cm_stride);
   if XNN_UNPREDICTABLE(mr <= 2) {
     a2 = a1;
     c2 = c1;
   }
-  const _Float16* a3 = (const _Float16*) ((uintptr_t) a2 + a_stride);
-  _Float16* c3 = (_Float16*) ((uintptr_t) c2 + cm_stride);
+  const xnn_float16* a3 = (const xnn_float16*) ((uintptr_t) a2 + a_stride);
+  xnn_float16* c3 = (xnn_float16*) ((uintptr_t) c2 + cm_stride);
   if XNN_UNPREDICTABLE(mr != 4) {
     a3 = a2;
     c3 = c2;
@@ -67,7 +67,7 @@ void xnn_f16_gemm_minmax_ukernel_4x4v__rvvfp16arith(
     }
     nc = nc - vl;
 
-    vfloat16m4_t vacc0 =  __riscv_vle16_v_f16m4((const _Float16*) w, vl);
+    vfloat16m4_t vacc0 =  __riscv_vle16_v_f16m4(w, vl);
     w = w + nr;
     vfloat16m4_t vacc1 =  __riscv_vmv_v_v_f16m4(vacc0, vl);
     vfloat16m4_t vacc2 =  __riscv_vmv_v_v_f16m4(vacc0, vl);
@@ -75,17 +75,17 @@ void xnn_f16_gemm_minmax_ukernel_4x4v__rvvfp16arith(
 
     size_t k = kc;
     do {
-      const _Float16 va0 = *a0++;
-      const _Float16 va1 = *a1++;
-      const _Float16 va2 = *a2++;
-      const _Float16 va3 = *a3++;
-      vfloat16m4_t vb = __riscv_vle16_v_f16m4((const _Float16*) w, vl);
+      const xnn_float16 va0 = *a0++;
+      const xnn_float16 va1 = *a1++;
+      const xnn_float16 va2 = *a2++;
+      const xnn_float16 va3 = *a3++;
+      vfloat16m4_t vb = __riscv_vle16_v_f16m4(w, vl);
       w = w + nr;
       vacc0 = __riscv_vfmacc_vf_f16m4(vacc0, va0, vb, vl);
       vacc1 = __riscv_vfmacc_vf_f16m4(vacc1, va1, vb, vl);
       vacc2 = __riscv_vfmacc_vf_f16m4(vacc2, va2, vb, vl);
       vacc3 = __riscv_vfmacc_vf_f16m4(vacc3, va3, vb, vl);
-      k -= sizeof(_Float16);
+      k -= sizeof(xnn_float16);
     } while (k != 0);
 
     // clamp results with min & max
@@ -101,16 +101,16 @@ void xnn_f16_gemm_minmax_ukernel_4x4v__rvvfp16arith(
 
     // store 4 x vl results to c
     __riscv_vse16_v_f16m4(c0, vacc0, vl);
-    c0 = (_Float16*) ((uintptr_t) c0 + cn_stride);
+    c0 = (xnn_float16*) ((uintptr_t) c0 + cn_stride);
     __riscv_vse16_v_f16m4(c1, vacc1, vl);
-    c1 = (_Float16*) ((uintptr_t) c1 + cn_stride);
+    c1 = (xnn_float16*) ((uintptr_t) c1 + cn_stride);
     __riscv_vse16_v_f16m4(c2, vacc2, vl);
-    c2 = (_Float16*) ((uintptr_t) c2 + cn_stride);
+    c2 = (xnn_float16*) ((uintptr_t) c2 + cn_stride);
     __riscv_vse16_v_f16m4(c3, vacc3, vl);
-    c3 = (_Float16*) ((uintptr_t) c3 + cn_stride);
-    a0 = (const _Float16*) ((uintptr_t) a0 - kc);
-    a1 = (const _Float16*) ((uintptr_t) a1 - kc);
-    a2 = (const _Float16*) ((uintptr_t) a2 - kc);
-    a3 = (const _Float16*) ((uintptr_t) a3 - kc);
+    c3 = (xnn_float16*) ((uintptr_t) c3 + cn_stride);
+    a0 = (const xnn_float16*) ((uintptr_t) a0 - kc);
+    a1 = (const xnn_float16*) ((uintptr_t) a1 - kc);
+    a2 = (const xnn_float16*) ((uintptr_t) a2 - kc);
+    a3 = (const xnn_float16*) ((uintptr_t) a3 - kc);
   } while (nc != 0);
 }

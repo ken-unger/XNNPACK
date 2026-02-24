@@ -50,16 +50,10 @@ void xnn_${DATATYPE_SPEC}_gemm_minmax${REQUANTIZATION_SPEC}_ukernel_${MR}x${OUT_
   assert(kc != 0);
 
   const ${XINT8_T}* a0 = a;
-  $if DATATYPE in ["QD8_F16", "QC4_F16", "QB4_F16"]:
-    uint16_t* c0 = (uint16_t*) c;
-  $else:
-    ${OUT_T}* c0 = c;
+  ${OUT_T}* c0 = c;
   $for M in range(1, MR):
     const ${XINT8_T}* a${M} = (const ${XINT8_T}*) ((uintptr_t) a${M-1} + a_stride);
-    $if DATATYPE in ["QD8_F16", "QC4_F16", "QB4_F16"]:
-      uint16_t* c${M} = (uint16_t*) ((uintptr_t) c${M-1} + cm_stride);
-    $else:
-      ${OUT_T}* c${M} = (${OUT_T}*) ((uintptr_t) c${M-1} + cm_stride);
+    ${OUT_T}* c${M} = (${OUT_T}*) ((uintptr_t) c${M-1} + cm_stride);
     $if M % 2 == 0:
       if XNN_UNPREDICTABLE(mr <= ${M}) {
         a${M} = a${M-1};
@@ -190,17 +184,17 @@ void xnn_${DATATYPE_SPEC}_gemm_minmax${REQUANTIZATION_SPEC}_ukernel_${MR}x${OUT_
         $for M in range(MR):
           vfloat16${INTER_LMUL}_t vfp16out${M} = __riscv_vfncvt_f_f_w_f16${INTER_LMUL}(vout${M}, vl);
 
-        const _Float16 vmin = *(const _Float16*) &params->scalar.min;
+        const xnn_float16 vmin = params->scalar.min;
         $for M in range(MR):
           vfp16out${M} = __riscv_vfmax_vf_f16${INTER_LMUL}(vfp16out${M}, vmin, vl);
-        const _Float16 vmax = *(const _Float16*) &params->scalar.max;
+        const xnn_float16 vmax = params->scalar.max;
         $for M in range(MR):
           vfp16out${M} = __riscv_vfmin_vf_f16${INTER_LMUL}(vfp16out${M}, vmax, vl);
 
         // store ${MR} x vl results to c
         $for M in range(MR):
-          __riscv_vse16_v_f16${INTER_LMUL}((_Float16*) c${M}, vfp16out${M}, vl);
-          c${M} = (uint16_t*) ((uintptr_t) c${M} + cn_stride);
+          __riscv_vse16_v_f16${INTER_LMUL}(c${M}, vfp16out${M}, vl);
+          c${M} = (xnn_float16*) ((uintptr_t) c${M} + cn_stride);
 
       $for M in range(MR):
         a${M} = (const ${XINT8_T}*) ((uintptr_t) a${M} - kc);

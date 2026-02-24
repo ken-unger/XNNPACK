@@ -40,10 +40,10 @@ void xnn_f16_igemm_minmax_ukernel_1x4v__rvvfp16arith(
   assert(w != NULL);
   assert(c != NULL);
 
-  const _Float16 vmin = *(const _Float16*) &params->scalar.min;
-  const _Float16 vmax = *(const _Float16*) &params->scalar.max;
+  const xnn_float16 vmin = params->scalar.min;
+  const xnn_float16 vmax = params->scalar.max;
 
-  _Float16* c0 = (_Float16*) c;
+  xnn_float16* c0 = c;
 
   const size_t nr = __riscv_vsetvlmax_e16m4();
   size_t vl = nr;
@@ -52,22 +52,22 @@ void xnn_f16_igemm_minmax_ukernel_1x4v__rvvfp16arith(
       vl = __riscv_vsetvl_e16m4(nc);
     }
     nc = nc - vl;
-    vfloat16m4_t vacc0 =  __riscv_vle16_v_f16m4((const _Float16*) w, vl);
+    vfloat16m4_t vacc0 =  __riscv_vle16_v_f16m4(w, vl);
     w = w + nr;
 
     size_t p = ks;
     do {
-      const _Float16* restrict a0 = (const _Float16*) a[0];
+      const xnn_float16* restrict a0 = a[0];
       assert(a0 != NULL);
-      if XNN_UNPREDICTABLE(a0 != (const _Float16*) zero) {
-        a0 = (const _Float16*) ((uintptr_t) a0 + a_offset);
+      if XNN_UNPREDICTABLE(a0 != (const xnn_float16*) zero) {
+        a0 = (const xnn_float16*) ((uintptr_t) a0 + a_offset);
       }
       a += 1;
 
       size_t k = kc;
       do {
-        const _Float16 va0 = (const _Float16) *a0++;
-        vfloat16m4_t vb = __riscv_vle16_v_f16m4((const _Float16*) w, vl);
+        const xnn_float16 va0 = *a0++;
+        vfloat16m4_t vb = __riscv_vle16_v_f16m4(w, vl);
         w = w + nr;
         vacc0 = __riscv_vfmacc_vf_f16m4(vacc0, va0, vb, vl);
 
@@ -82,7 +82,7 @@ void xnn_f16_igemm_minmax_ukernel_1x4v__rvvfp16arith(
     vacc0 = __riscv_vfmin_vf_f16m4(vacc0, vmax, vl);
     // store 1 x vl results to c
     __riscv_vse16_v_f16m4(c0, vacc0, vl);
-    c0 = (_Float16*) ((uintptr_t) c0 + cn_stride);
+    c0 = (xnn_float16*) ((uintptr_t) c0 + cn_stride);
 
     a = (const xnn_float16** restrict) ((uintptr_t) a - ks);
   } while (nc != 0);

@@ -41,7 +41,7 @@ void xnn_qd8_f16_qc8w_igemm_minmax_ukernel_1x4v__rvvfp16arith(
   assert(w != NULL);
   assert(c != NULL);
 
-  uint16_t* c0 = (uint16_t*) c;
+  xnn_float16* c0 = c;
 
   const size_t nr = __riscv_vsetvlmax_e32m4();
   size_t vl = nr;
@@ -102,15 +102,15 @@ void xnn_qd8_f16_qc8w_igemm_minmax_ukernel_1x4v__rvvfp16arith(
 
     vfloat16m2_t vfp16acc0 = __riscv_vfncvt_f_f_w_f16m2(vfpacc0, vl);
 
-    const _Float16 voutput_min = *(const _Float16*) &params->scalar.min;
+    const xnn_float16 voutput_min = params->scalar.min;
     vfp16acc0 = __riscv_vfmax_vf_f16m2(vfp16acc0, voutput_min, vl);
 
-    const _Float16 voutput_max = *(const _Float16*) &params->scalar.max;
+    const xnn_float16 voutput_max = params->scalar.max;
     vfp16acc0 = __riscv_vfmin_vf_f16m2(vfp16acc0, voutput_max, vl);
 
     __riscv_vse16_v_f16m2(c0, vfp16acc0, vl);
 
-    c0 = (_Float16*) ((uintptr_t) c0 + cn_stride);
+    c0 = (xnn_float16*) ((uintptr_t) c0 + cn_stride);
 
     a = (const int8_t**restrict) ((uintptr_t) a - ks);
 

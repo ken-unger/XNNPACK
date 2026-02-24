@@ -41,16 +41,16 @@ void xnn_qd8_f16_qc8w_igemm_minmax_ukernel_4x4v__rvvfp16arith(
   assert(w != NULL);
   assert(c != NULL);
 
-  uint16_t* c0 = (uint16_t*) c;
-  uint16_t* c1 = (uint16_t*) ((uintptr_t) c0 + cm_stride);
+  xnn_float16* c0 = c;
+  xnn_float16* c1 = (xnn_float16*) ((uintptr_t) c0 + cm_stride);
   if XNN_UNPREDICTABLE(mr < 2) {
     c1 = c0;
   }
-  uint16_t* c2 = (uint16_t*) ((uintptr_t) c1 + cm_stride);
+  xnn_float16* c2 = (xnn_float16*) ((uintptr_t) c1 + cm_stride);
   if XNN_UNPREDICTABLE(mr <= 2) {
     c2 = c1;
   }
-  uint16_t* c3 = (uint16_t*) ((uintptr_t) c2 + cm_stride);
+  xnn_float16* c3 = (xnn_float16*) ((uintptr_t) c2 + cm_stride);
   if XNN_UNPREDICTABLE(mr != 4) {
     c3 = c2;
   }
@@ -159,13 +159,13 @@ void xnn_qd8_f16_qc8w_igemm_minmax_ukernel_4x4v__rvvfp16arith(
     vfloat16m2_t vfp16acc2 = __riscv_vfncvt_f_f_w_f16m2(vfpacc2, vl);
     vfloat16m2_t vfp16acc3 = __riscv_vfncvt_f_f_w_f16m2(vfpacc3, vl);
 
-    const _Float16 voutput_min = *(const _Float16*) &params->scalar.min;
+    const xnn_float16 voutput_min = params->scalar.min;
     vfp16acc0 = __riscv_vfmax_vf_f16m2(vfp16acc0, voutput_min, vl);
     vfp16acc1 = __riscv_vfmax_vf_f16m2(vfp16acc1, voutput_min, vl);
     vfp16acc2 = __riscv_vfmax_vf_f16m2(vfp16acc2, voutput_min, vl);
     vfp16acc3 = __riscv_vfmax_vf_f16m2(vfp16acc3, voutput_min, vl);
 
-    const _Float16 voutput_max = *(const _Float16*) &params->scalar.max;
+    const xnn_float16 voutput_max = params->scalar.max;
     vfp16acc0 = __riscv_vfmin_vf_f16m2(vfp16acc0, voutput_max, vl);
     vfp16acc1 = __riscv_vfmin_vf_f16m2(vfp16acc1, voutput_max, vl);
     vfp16acc2 = __riscv_vfmin_vf_f16m2(vfp16acc2, voutput_max, vl);
@@ -176,10 +176,10 @@ void xnn_qd8_f16_qc8w_igemm_minmax_ukernel_4x4v__rvvfp16arith(
     __riscv_vse16_v_f16m2(c1, vfp16acc1, vl);
     __riscv_vse16_v_f16m2(c0, vfp16acc0, vl);
 
-    c3 = (_Float16*) ((uintptr_t) c3 + cn_stride);
-    c2 = (_Float16*) ((uintptr_t) c2 + cn_stride);
-    c1 = (_Float16*) ((uintptr_t) c1 + cn_stride);
-    c0 = (_Float16*) ((uintptr_t) c0 + cn_stride);
+    c3 = (xnn_float16*) ((uintptr_t) c3 + cn_stride);
+    c2 = (xnn_float16*) ((uintptr_t) c2 + cn_stride);
+    c1 = (xnn_float16*) ((uintptr_t) c1 + cn_stride);
+    c0 = (xnn_float16*) ((uintptr_t) c0 + cn_stride);
 
     a = (const int8_t**restrict) ((uintptr_t) a - ks);
 

@@ -319,7 +319,7 @@ static void init_f16_gemm_config(void) {
       f16_gemm_config.pack_gemm_gio = (xnn_packw_gemm_gio_ukernel_fn) xnn_pack_f16_gemm_gio_w;
       f16_gemm_config.pack_gemm_goi = (xnn_packw_gemm_goi_ukernel_fn) xnn_pack_f16_gemm_goi_w;
       f16_gemm_config.mr = 7;
-      f16_gemm_config.nr = 4 * hardware_config->vlenb / sizeof(uint16_t);
+      f16_gemm_config.nr = 4 * hardware_config->vlenb / sizeof(xnn_float16);
     }
   #endif
   assert(f16_gemm_config.mr <= XNN_MAX_MR);
@@ -2265,7 +2265,7 @@ static void init_qd8_f16_qc4w_gemm_config(void) {
         qd8_f16_qc4w_gemm_config.minmax.dqgemm[XNN_MR_TO_INDEX(7)] = XNN_INIT_HMP_DQGEMM_UKERNEL(xnn_qd8_f16_qc4w_gemm_minmax_ukernel_7x4v__rvvfp16arith);
         qd8_f16_qc4w_gemm_config.init.f16_qc4w = xnn_init_f16_qc4w_minmax_scalar_params;
         qd8_f16_qc4w_gemm_config.mr = 7;
-        qd8_f16_qc4w_gemm_config.nr = 2 * hardware_config->vlenb / sizeof(uint16_t); //
+        qd8_f16_qc4w_gemm_config.nr = 2 * hardware_config->vlenb / sizeof(xnn_float16); //
         qd8_f16_qc4w_gemm_config.planes = 2;
     }
   #endif
@@ -3226,7 +3226,7 @@ static void init_qd8_f16_qc8w_gemm_config(void) {
         qd8_f16_qc8w_gemm_config.minmax.dqgemm[XNN_MR_TO_INDEX(7)] = XNN_INIT_HMP_DQGEMM_UKERNEL(xnn_qd8_f16_qc8w_gemm_minmax_ukernel_7x4v__rvvfp16arith);
         qd8_f16_qc8w_gemm_config.init.f16 = xnn_init_f16_minmax_scalar_params;
         qd8_f16_qc8w_gemm_config.mr = 7;
-        qd8_f16_qc8w_gemm_config.nr = 2 * hardware_config->vlenb / sizeof(uint16_t); // 4
+        qd8_f16_qc8w_gemm_config.nr = 2 * hardware_config->vlenb / sizeof(xnn_float16); // 4
     }
   #endif
   assert(qd8_f16_qc8w_gemm_config.mr <= XNN_MAX_MR);
@@ -3582,7 +3582,7 @@ static void init_qd8_f16_qc8w_igemm_config(void) {
         qd8_f16_qc8w_igemm_config.minmax.dqigemm[XNN_MR_TO_INDEX(7)] = XNN_INIT_HMP_DQIGEMM_UKERNEL(xnn_qd8_f16_qc8w_igemm_minmax_ukernel_7x4v__rvvfp16arith);
         qd8_f16_qc8w_igemm_config.init.f16 = xnn_init_f16_minmax_scalar_params;
         qd8_f16_qc8w_igemm_config.mr = 7;
-        qd8_f16_qc8w_igemm_config.nr = 2 * hardware_config->vlenb / sizeof(uint16_t);  // 4
+        qd8_f16_qc8w_igemm_config.nr = 2 * hardware_config->vlenb / sizeof(xnn_float16);  // 4
     }
   #endif
   assert(qd8_f16_qc8w_igemm_config.mr <= XNN_MAX_MR);

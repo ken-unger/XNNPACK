@@ -35,7 +35,7 @@ void xnn_qd8_f16_qc4w_gemm_minmax_ukernel_1x4v__rvvfp16arith(
   assert(kc != 0);
 
   const int8_t* a0 = a;
-  uint16_t* c0 = (uint16_t*) c;
+  xnn_float16* c0 = c;
 
   const size_t nr = __riscv_vsetvlmax_e32m4();
   size_t vl = nr;
@@ -86,14 +86,14 @@ void xnn_qd8_f16_qc4w_gemm_minmax_ukernel_1x4v__rvvfp16arith(
 
     vfloat16m2_t vfp16out0 = __riscv_vfncvt_f_f_w_f16m2(vout0, vl);
 
-    const _Float16 vmin = *(const _Float16*) &params->scalar.min;
+    const xnn_float16 vmin = params->scalar.min;
     vfp16out0 = __riscv_vfmax_vf_f16m2(vfp16out0, vmin, vl);
-    const _Float16 vmax = *(const _Float16*) &params->scalar.max;
+    const xnn_float16 vmax = params->scalar.max;
     vfp16out0 = __riscv_vfmin_vf_f16m2(vfp16out0, vmax, vl);
 
     // store 1 x vl results to c
-    __riscv_vse16_v_f16m2((_Float16*) c0, vfp16out0, vl);
-    c0 = (uint16_t*) ((uintptr_t) c0 + cn_stride);
+    __riscv_vse16_v_f16m2(c0, vfp16out0, vl);
+    c0 = (xnn_float16*) ((uintptr_t) c0 + cn_stride);
 
     a0 = (const int8_t*) ((uintptr_t) a0 - kc);
 

@@ -38,12 +38,12 @@ void xnn_f16_igemm_minmax_ukernel_${MR}x${LMUL}v__rvvfp16arith(
   assert(w != NULL);
   assert(c != NULL);
 
-  const _Float16 vmin = *(const _Float16*) &params->scalar.min;
-  const _Float16 vmax = *(const _Float16*) &params->scalar.max;
+  const xnn_float16 vmin = params->scalar.min;
+  const xnn_float16 vmax = params->scalar.max;
 
-  _Float16* c0 = (_Float16*) c;
+  xnn_float16* c0 = c;
   $for M in range(1, MR):
-    _Float16* c${M} = (_Float16*) ((uintptr_t) c${M-1} + cm_stride);
+    xnn_float16* c${M} = (xnn_float16*) ((uintptr_t) c${M-1} + cm_stride);
     $if M % 2 == 0:
       if XNN_UNPREDICTABLE(mr <= ${M}) {
         c${M} = c${M-1};
@@ -64,7 +64,7 @@ void xnn_f16_igemm_minmax_ukernel_${MR}x${LMUL}v__rvvfp16arith(
       vl = __riscv_vsetvl_e16m${LMUL}(nc);
     }
     nc = nc - vl;
-    vfloat16m${LMUL}_t vacc0 =  __riscv_vle16_v_f16m${LMUL}((const _Float16*) w, vl);
+    vfloat16m${LMUL}_t vacc0 =  __riscv_vle16_v_f16m${LMUL}(w, vl);
     w = w + nr;
     $for M in range(1, MR):  
       vfloat16m${LMUL}_t vacc${M} =  __riscv_vmv_v_v_f16m${LMUL}(vacc0, vl);
@@ -72,18 +72,18 @@ void xnn_f16_igemm_minmax_ukernel_${MR}x${LMUL}v__rvvfp16arith(
     size_t p = ks;
     do {
       $for M in range(MR):
-        const _Float16* restrict a${M} = (const _Float16*) a[${M}];
+        const xnn_float16* restrict a${M} = a[${M}];
         assert(a${M} != NULL);
-        if XNN_UNPREDICTABLE(a${M} != (const _Float16*) zero) {
-          a${M} = (const _Float16*) ((uintptr_t) a${M} + a_offset);
+        if XNN_UNPREDICTABLE(a${M} != (const xnn_float16*) zero) {
+          a${M} = (const xnn_float16*) ((uintptr_t) a${M} + a_offset);
         }
       a += ${MR};
 
       size_t k = kc;
       do {
         $for M in range(MR):
-          const _Float16 va${M} = (const _Float16) *a${M}++;
-        vfloat16m${LMUL}_t vb = __riscv_vle16_v_f16m${LMUL}((const _Float16*) w, vl);
+          const xnn_float16 va${M} = *a${M}++;
+        vfloat16m${LMUL}_t vb = __riscv_vle16_v_f16m${LMUL}(w, vl);
         w = w + nr;
         $for M in range(MR):
           vacc${M} = __riscv_vfmacc_vf_f16m${LMUL}(vacc${M}, va${M}, vb, vl);
@@ -102,7 +102,7 @@ void xnn_f16_igemm_minmax_ukernel_${MR}x${LMUL}v__rvvfp16arith(
     // store ${MR} x vl results to c
     $for M in reversed(range(MR)):
       __riscv_vse16_v_f16m${LMUL}(c${M}, vacc${M}, vl);
-      c${M} = (_Float16*) ((uintptr_t) c${M} + cn_stride);
+      c${M} = (xnn_float16*) ((uintptr_t) c${M} + cn_stride);
 
     a = (const xnn_float16** restrict) ((uintptr_t) a - ks);
   } while (nc != 0);
