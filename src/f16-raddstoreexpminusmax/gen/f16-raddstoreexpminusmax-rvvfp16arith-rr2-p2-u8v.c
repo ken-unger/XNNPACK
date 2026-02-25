@@ -45,7 +45,7 @@ void xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u8v(
   const xnn_float16* i = input;
   xnn_float16* o = output;
 
-  batch >>= 1;
+  batch >>= XNN_LOG2_SIZEOF_FLOAT16;
 
   size_t vlmax = __riscv_vsetvl_e16m8(batch);
   vfloat16m8_t vacc = __riscv_vfmv_v_f_f16m8(0.0f, vlmax);
@@ -58,30 +58,30 @@ void xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u8v(
 
     const vfloat16m8_t vx = __riscv_vfsub_vf_f16m8(vi, *max, vl);
 
-    vfloat16m8_t vn = __riscv_vfmul_vf_f16m8(vx, vmagic_bias, vl);
-    vn = __riscv_vfadd_vf_f16m8(vn, vlog2e, vl);
+    vfloat16m8_t vn = __riscv_vfmul_vf_f16m8(vx, vlog2e, vl);
+    vn = __riscv_vfadd_vf_f16m8(vn, vmagic_bias, vl);
 
     const vfloat16m8_t vs = __riscv_vreinterpret_v_i16m8_f16m8(__riscv_vsll_vx_i16m8(__riscv_vreinterpret_v_f16m8_i16m8(vn), 10, vl));
 
     vn = __riscv_vfsub_vf_f16m8(vn, vmagic_bias, vl);
 
-    vfloat16m8_t vt = __riscv_vfmul_vv_f16m8(vx, vn, vl);
-    vt = __riscv_vfadd_vf_f16m8(vt, vminus_ln2_hi, vl);
+    vfloat16m8_t vt = __riscv_vfmul_vf_f16m8(vn, vminus_ln2_hi, vl);
+    vt = __riscv_vfadd_vv_f16m8(vt, vx, vl);
 
-    vt = __riscv_vfmul_vv_f16m8(vt, vn, vl);
-    vt = __riscv_vfadd_vf_f16m8(vt, vminus_ln2_lo, vl);
+    vt = __riscv_vfmacc_vf_f16m8(vt, vminus_ln2_lo, vn, vl);
 
-    const vfloat16m8_t vp = __riscv_vfadd_vf_f16m8(vt, vc1 * vc2, vl);
+    vfloat16m8_t vp = __riscv_vfmul_vf_f16m8(vt, vc2, vl);
+    vp = __riscv_vfadd_vf_f16m8(vp, vc1, vl);
 
     vt = __riscv_vfmul_vv_f16m8(vt, vs, vl);
 
-    vfloat16m8_t vf = __riscv_vfmul_vv_f16m8(vs, vp, vl);
-    vf = __riscv_vfadd_vv_f16m8(vf, vt, vl);
+    vfloat16m8_t vf = __riscv_vfmul_vv_f16m8(vp, vt, vl);
+    vf = __riscv_vfadd_vv_f16m8(vf, vs, vl);
 
     const vbool2_t vmask = __riscv_vmflt_vf_f16m8_b2(vx, vdenorm_cutoff, vl);
     vf = __riscv_vreinterpret_v_u16m8_f16m8(__riscv_vand_vx_u16m8_m(vmask, __riscv_vreinterpret_v_f16m8_u16m8(vf), UINT16_C(0x0000), vl));
 
-    __riscv_vse16_v_f16m8(o, vf, vl); o += 8;
+    __riscv_vse16_v_f16m8(o, vf, vl); o += vl;
 
     vacc = __riscv_vfadd_vv_f16m8(vacc, vf, vl);
   } while (batch > 0);

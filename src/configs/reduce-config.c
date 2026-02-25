@@ -690,6 +690,10 @@ static void init_f16_rmax_config(void) {
     }
     f16_rmax_config.rd_ukernel = XNN_INIT_REDUCE_DISCONTIGUOUS_UKERNEL(xnn_f16_rdmax_ukernel_2p2x__scalar_u2);
     f16_rmax_config.rd_width = 2;
+  #elif XNN_ARCH_RISCV && XNN_ENABLE_RISCV_FP16_VECTOR
+    f16_rmax_config.ukernel = XNN_INIT_REDUCE_UKERNEL(xnn_f16_rmax_ukernel__rvvfp16arith_u8v);
+    f16_rmax_config.rd_ukernel = XNN_INIT_REDUCE_DISCONTIGUOUS_UKERNEL(xnn_f16_rdmax_ukernel_2p2x__scalar_u2);
+    f16_rmax_config.rd_width = 2;
   #else
     f16_rmax_config.ukernel = XNN_INIT_REDUCE_UKERNEL(xnn_f16_rmax_ukernel__scalar_u2_acc2);
     f16_rmax_config.rd_ukernel = XNN_INIT_REDUCE_DISCONTIGUOUS_UKERNEL(xnn_f16_rdmax_ukernel_2p2x__scalar_u2);
@@ -728,6 +732,8 @@ static void init_f16_rminmax_config(void) {
     {
       f16_rminmax_config.ukernel = XNN_INIT_REDUCE_UKERNEL(xnn_f16_rminmax_ukernel__scalar_u2_acc2);
     }
+  #elif XNN_ARCH_RISCV && XNN_ENABLE_RISCV_FP16_VECTOR
+    f16_rminmax_config.ukernel = XNN_INIT_REDUCE_UKERNEL(xnn_f16_rminmax_ukernel__rvvfp16arith_u8v);
   #else
     f16_rminmax_config.ukernel = XNN_INIT_REDUCE_UKERNEL(xnn_f16_rminmax_ukernel__scalar_u2_acc2);
   #endif
@@ -766,6 +772,10 @@ static void init_f16_rmin_config(void) {
     {
       f16_rmin_config.ukernel = XNN_INIT_REDUCE_UKERNEL(xnn_f16_rmin_ukernel__scalar_u2_acc2);
     }
+    f16_rmin_config.rd_ukernel = XNN_INIT_REDUCE_DISCONTIGUOUS_UKERNEL(xnn_f16_rdmin_ukernel_2p2x__scalar_u2);
+    f16_rmin_config.rd_width = 2;
+  #elif XNN_ARCH_RISCV && XNN_ENABLE_RISCV_FP16_VECTOR
+    f16_rmin_config.ukernel = XNN_INIT_REDUCE_UKERNEL(xnn_f16_rmin_ukernel__rvvfp16arith_u8v);
     f16_rmin_config.rd_ukernel = XNN_INIT_REDUCE_DISCONTIGUOUS_UKERNEL(xnn_f16_rdmin_ukernel_2p2x__scalar_u2);
     f16_rmin_config.rd_width = 2;
   #else
