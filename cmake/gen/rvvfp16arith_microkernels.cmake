@@ -36,6 +36,9 @@ SET(NON_PROD_RVVFP16ARITH_MICROKERNEL_SRCS
   src/f16-f32-vcvt/gen/f16-f32-vcvt-rvvfp16arith-u4v.c
   src/f16-gemm/gen/f16-gemm-4x4v-minmax-rvvfp16arith.c
   src/f16-igemm/gen/f16-igemm-4x4v-minmax-rvvfp16arith.c
+  src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-rvvfp16arith-rr2-p2-u2v.c
+  src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-rvvfp16arith-rr2-p2-u4v.c
+  src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-rvvfp16arith-rr2-p2-u8v.c
   src/f16-spmm/gen/f16-spmm-1vx1-minmax-rvvfp16arith.c
   src/f16-spmm/gen/f16-spmm-2vx1-minmax-rvvfp16arith.c
   src/f16-spmm/gen/f16-spmm-4vx1-minmax-rvvfp16arith.c

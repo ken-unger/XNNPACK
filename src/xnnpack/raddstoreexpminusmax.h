@@ -111,6 +111,13 @@ DECLARE_F16_RADDSTOREEXPMINUSMAX_UKERNEL_FUNCTION(
 DECLARE_F16_RADDSTOREEXPMINUSMAX_UKERNEL_FUNCTION(
     xnn_f16_raddstoreexpminusmax_ukernel__neonfp16arith_rr2_p2_u96_acc6)
 
+DECLARE_F16_RADDSTOREEXPMINUSMAX_UKERNEL_FUNCTION(
+    xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u2v)
+DECLARE_F16_RADDSTOREEXPMINUSMAX_UKERNEL_FUNCTION(
+    xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u4v)
+DECLARE_F16_RADDSTOREEXPMINUSMAX_UKERNEL_FUNCTION(
+    xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u8v)
+
 #define DECLARE_F32_RADDSTOREEXPMINUSMAX_UKERNEL_FUNCTION(fn_name)          \
   XNN_INTERNAL void fn_name(size_t n, const float* input, const float* max, \
                             float* output, float* sum, const void* params);
