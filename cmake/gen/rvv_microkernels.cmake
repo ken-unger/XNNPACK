@@ -34,7 +34,6 @@ SET(PROD_RVV_MICROKERNEL_SRCS
   src/f32-rminmax/gen/f32-rmax-rvv-u8v.c
   src/f32-rminmax/gen/f32-rmin-rvv-u8v.c
   src/f32-rminmax/gen/f32-rminmax-rvv-u8v.c
-  src/f32-rsum/gen/f32-rsum-rvv-u4v.c
   src/f32-spmm/gen/f32-spmm-4vx4-minmax-rvv.c
   src/f32-spmm/gen/f32-spmm-8vx1-minmax-rvv.c
   src/f32-spmm/gen/f32-spmm-8vx2-minmax-rvv.c
@@ -157,6 +156,7 @@ SET(NON_PROD_RVV_MICROKERNEL_SRCS
   src/f32-rminmax/gen/f32-rminmax-rvv-u4v.c
   src/f32-rsum/gen/f32-rsum-rvv-u1v.c
   src/f32-rsum/gen/f32-rsum-rvv-u2v.c
+  src/f32-rsum/gen/f32-rsum-rvv-u4v.c
   src/f32-rsum/gen/f32-rsum-rvv-u8v.c
   src/f32-spmm/gen/f32-spmm-1vx1-minmax-rvv.c
   src/f32-spmm/gen/f32-spmm-1vx2-minmax-rvv.c

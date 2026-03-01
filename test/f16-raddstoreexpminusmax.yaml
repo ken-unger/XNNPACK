@@ -25,3 +25,8 @@
 - name: xnn_f16_raddstoreexpminusmax_ukernel__avx2_rr1_p2_u64
 - name: xnn_f16_raddstoreexpminusmax_ukernel__avx2_rr1_p2_u64_acc2
 - name: xnn_f16_raddstoreexpminusmax_ukernel__avx2_rr1_p2_u64_acc4
+
+# RISC-V Vector + FP16
+- name: xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u2v
+- name: xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u4v
+- name: xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u8v

@@ -7,6 +7,10 @@
 
 PROD_RVVFP16ARITH_MICROKERNEL_SRCS = [
     "src/f16-f32-vcvt/gen/f16-f32-vcvt-rvvfp16arith-u4v.c",
+    "src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-rvvfp16arith-rr2-p2-u8v.c",
+    "src/f16-rminmax/gen/f16-rmax-rvvfp16arith-u8v.c",
+    "src/f16-rminmax/gen/f16-rmin-rvvfp16arith-u8v.c",
+    "src/f16-rminmax/gen/f16-rminmax-rvvfp16arith-u8v.c",
     "src/f16-vbinary/gen/f16-vadd-rvvfp16arith-u8v.c",
     "src/f16-vbinary/gen/f16-vaddc-rvvfp16arith-u8v.c",
     "src/f16-vbinary/gen/f16-vdiv-rvvfp16arith-u8v.c",
@@ -36,6 +40,17 @@ PROD_RVVFP16ARITH_MICROKERNEL_SRCS = [
 NON_PROD_RVVFP16ARITH_MICROKERNEL_SRCS = [
     "src/f16-f32-vcvt/gen/f16-f32-vcvt-rvvfp16arith-u1v.c",
     "src/f16-f32-vcvt/gen/f16-f32-vcvt-rvvfp16arith-u2v.c",
+    "src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-rvvfp16arith-rr2-p2-u2v.c",
+    "src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-rvvfp16arith-rr2-p2-u4v.c",
+    "src/f16-rminmax/gen/f16-rmax-rvvfp16arith-u1v.c",
+    "src/f16-rminmax/gen/f16-rmax-rvvfp16arith-u2v.c",
+    "src/f16-rminmax/gen/f16-rmax-rvvfp16arith-u4v.c",
+    "src/f16-rminmax/gen/f16-rmin-rvvfp16arith-u1v.c",
+    "src/f16-rminmax/gen/f16-rmin-rvvfp16arith-u2v.c",
+    "src/f16-rminmax/gen/f16-rmin-rvvfp16arith-u4v.c",
+    "src/f16-rminmax/gen/f16-rminmax-rvvfp16arith-u1v.c",
+    "src/f16-rminmax/gen/f16-rminmax-rvvfp16arith-u2v.c",
+    "src/f16-rminmax/gen/f16-rminmax-rvvfp16arith-u4v.c",
     "src/f16-vbinary/gen/f16-vadd-rvvfp16arith-u1v.c",
     "src/f16-vbinary/gen/f16-vadd-rvvfp16arith-u2v.c",
     "src/f16-vbinary/gen/f16-vadd-rvvfp16arith-u4v.c",
