@@ -78,7 +78,6 @@ void xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u8v(
 
     const vbool2_t vmask = __riscv_vmflt(vx, vdenorm_cutoff, vl);
     vf = __riscv_vfmerge(vf, 0.0f, vmask, vl);
-    //vf = __riscv_vreinterpret_v_u16m8_f16m8(__riscv_vand(vmask, __riscv_vreinterpret_v_f16m8_u16m8(vf), UINT16_C(0x0000), vl));
 
     __riscv_vse16(o, vf, vl); o += vl;
 
