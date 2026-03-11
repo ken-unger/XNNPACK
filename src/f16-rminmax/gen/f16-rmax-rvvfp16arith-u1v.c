@@ -14,9 +14,7 @@
 #include <riscv_vector.h>
 
 #include "src/xnnpack/common.h"
-#include "src/xnnpack/intrinsics-polyfill.h"
 #include "src/xnnpack/vunary.h"
-
 
 void xnn_f16_rmax_ukernel__rvvfp16arith_u1v(
     size_t batch,

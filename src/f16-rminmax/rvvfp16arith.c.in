@@ -11,9 +11,7 @@ $assert OP in ["MAX", "MIN", "MINMAX"]
 #include <riscv_vector.h>
 
 #include "src/xnnpack/common.h"
-#include "src/xnnpack/intrinsics-polyfill.h"
 #include "src/xnnpack/vunary.h"
-
 
 $EMIT_MIN = "MIN" in OP
 $EMIT_MAX = "MAX" in OP

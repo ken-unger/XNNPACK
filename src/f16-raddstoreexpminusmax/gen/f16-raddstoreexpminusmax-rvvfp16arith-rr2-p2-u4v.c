@@ -34,13 +34,13 @@ void xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u4v(
   assert(output != NULL);
   assert(sum != NULL);
 
-  const xnn_float16 vlog2e = (xnn_float16) UINT16_C(0x3DC5);  // 0x1.714p+0h 0x1.714p+0h;
-  const xnn_float16 vmagic_bias = (xnn_float16) UINT16_C(0x660F);  //0x1.83Cp+10h;
-  const xnn_float16 vminus_ln2_hi = (xnn_float16) UINT16_C(0xB98C);  // -0x1.630p-1h;
-  const xnn_float16 vminus_ln2_lo = (xnn_float16) UINT16_C(0x0AF4);  // 0x1.BD0p-13h;
-  const xnn_float16 vc2 = (xnn_float16) UINT16_C(0x37F9);  // 0x1.FE4p-2h;
-  const xnn_float16 vc1 = (xnn_float16) UINT16_C(0x3C0E);  // 0x1.038p+0h;
-  const xnn_float16 vdenorm_cutoff = (xnn_float16) UINT16_C(0xC8DA);  // -0x1.368p+3h;
+  const xnn_float16 vlog2e = 0x1.715476p0f;
+  const xnn_float16 vmagic_bias = 0x1.83Cp+10f;
+  const xnn_float16 vminus_ln2_hi = -0x1.630p-1f;
+  const xnn_float16 vminus_ln2_lo = 0x1.BD0p-13f;
+  const xnn_float16 vc2 = 0x1.FF3A32p-2f;
+  const xnn_float16 vc1 = 0x1.039E10p+0f;
+  const xnn_float16 vdenorm_cutoff = -0x1.368000p+3f;
 
   const xnn_float16* i = input;
   xnn_float16* o = output;
@@ -51,40 +51,40 @@ void xnn_f16_raddstoreexpminusmax_ukernel__rvvfp16arith_rr2_p2_u4v(
   vfloat16m4_t vacc = __riscv_vfmv_v_f_f16m4(0.0f, vlmax);
 
   do {
-    size_t vl = __riscv_vsetvl_e16m4(batch);
-    batch -= vl;
+    size_t vl = __riscv_vsetvl_e16m4(batch); batch -= vl;
 
     vfloat16m4_t vi = __riscv_vle16_v_f16m4(i, vl); i += vl;
 
-    const vfloat16m4_t vx = __riscv_vfsub_vf_f16m4(vi, *max, vl);
+    const vfloat16m4_t vx = __riscv_vfsub(vi, *max, vl);
 
     vfloat16m4_t vn = __riscv_vfmv_v_f_f16m4(vmagic_bias, vl);
-    vn = __riscv_vfmacc_vf_f16m4(vn, vlog2e, vx, vl);
+    vn = __riscv_vfmacc(vn, vlog2e, vx, vl);
 
-    const vfloat16m4_t vs = __riscv_vreinterpret_v_i16m4_f16m4(__riscv_vsll_vx_i16m4(__riscv_vreinterpret_v_f16m4_i16m4(vn), 10, vl));
+    const vfloat16m4_t vs = __riscv_vreinterpret_v_i16m4_f16m4(__riscv_vsll(__riscv_vreinterpret_v_f16m4_i16m4(vn), 10, vl));
 
-    vn = __riscv_vfsub_vf_f16m4(vn, vmagic_bias, vl);
+    vn = __riscv_vfsub(vn, vmagic_bias, vl);
 
     vfloat16m4_t vt = __riscv_vmv_v_v_f16m4(vx, vl);
-    vt = __riscv_vfmacc_vf_f16m4(vt, vminus_ln2_hi, vn, vl);
-    vt = __riscv_vfmacc_vf_f16m4(vt, vminus_ln2_lo, vn, vl);
+    vt = __riscv_vfmacc(vt, vminus_ln2_hi, vn, vl);
+    vt = __riscv_vfmacc(vt, vminus_ln2_lo, vn, vl);
 
     vfloat16m4_t vp = __riscv_vfmv_v_f_f16m4(vc1, vl);
-    vp = __riscv_vfmacc_vf_f16m4(vp, vc2, vt, vl);
+    vp = __riscv_vfmacc(vp, vc2, vt, vl);
 
-    vt = __riscv_vfmul_vv_f16m4(vt, vs, vl);
+    vt = __riscv_vfmul(vt, vs, vl);
 
     vfloat16m4_t vf = __riscv_vmv_v_v_f16m4(vs, vl);
-    vf = __riscv_vfmacc_vv_f16m4(vf, vp, vt, vl);
+    vf = __riscv_vfmacc(vf, vp, vt, vl);
 
-    const vbool4_t vmask = __riscv_vmflt_vf_f16m4_b4(vx, vdenorm_cutoff, vl);
-    vf = __riscv_vreinterpret_v_u16m4_f16m4(__riscv_vand_vx_u16m4_m(vmask, __riscv_vreinterpret_v_f16m4_u16m4(vf), UINT16_C(0x0000), vl));
+    const vbool4_t vmask = __riscv_vmflt(vx, vdenorm_cutoff, vl);
+    vf = __riscv_vfmerge(vf, 0.0f, vmask, vl);
+    //vf = __riscv_vreinterpret_v_u16m4_f16m4(__riscv_vand(vmask, __riscv_vreinterpret_v_f16m4_u16m4(vf), UINT16_C(0x0000), vl));
 
-    __riscv_vse16_v_f16m4(o, vf, vl); o += vl;
+    __riscv_vse16(o, vf, vl); o += vl;
 
-    vacc = __riscv_vfadd_vv_f16m4(vacc, vf, vl);
+    vacc = __riscv_vfadd(vacc, vf, vl);
   } while (batch > 0);
 
-   vfloat16m1_t v0 = __riscv_vfmv_s_f_f16m1(0.0f, 1);
-  *sum = __riscv_vfmv_f_s_f16m1_f16(__riscv_vfredusum_vs_f16m4_f16m1(vacc, v0, vlmax));
+  vfloat16m1_t v0 = __riscv_vfmv_s_f_f16m1(0.0f, 1);
+  *sum = __riscv_vfmv_f(__riscv_vfredosum(vacc, v0, vlmax));
 }

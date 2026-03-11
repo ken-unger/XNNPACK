@@ -27,7 +27,7 @@ tools/xngen src/f16-raddstoreexpminusmax/avx2-rr1-p2.c.in -D BATCH_TILE=64 -D AC
 tools/xngen src/f16-raddstoreexpminusmax/avx2-rr1-p2.c.in -D BATCH_TILE=64 -D ACCUMULATORS=2 -o src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-avx2-rr1-p2-u64-acc2.c &
 tools/xngen src/f16-raddstoreexpminusmax/avx2-rr1-p2.c.in -D BATCH_TILE=64 -D ACCUMULATORS=4 -o src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-avx2-rr1-p2-u64-acc4.c &
 
-# RISCV FP16 VECTOR
+# RISCV Vector
 tools/xngen src/f16-raddstoreexpminusmax/rvvfp16arith-rr2-p2.c.in -D LMUL=2 -o src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-rvvfp16arith-rr2-p2-u2v.c &
 tools/xngen src/f16-raddstoreexpminusmax/rvvfp16arith-rr2-p2.c.in -D LMUL=4 -o src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-rvvfp16arith-rr2-p2-u4v.c &
 tools/xngen src/f16-raddstoreexpminusmax/rvvfp16arith-rr2-p2.c.in -D LMUL=8 -o src/f16-raddstoreexpminusmax/gen/f16-raddstoreexpminusmax-rvvfp16arith-rr2-p2-u8v.c &

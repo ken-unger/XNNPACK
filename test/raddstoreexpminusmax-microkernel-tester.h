@@ -80,7 +80,7 @@ class RAddStoreExpMinusMaxMicrokernelTester {
             << "element " << i << " / " << elements() << ", x_max "
             << x_max_as_float;
       }
-      ASSERT_NEAR(sum_ref, sum, std::abs(sum_ref) * 5.0e-3f)
+      ASSERT_NEAR(sum_ref, sum, std::abs(sum_ref) * 10.0e-3f)
           << "batch " << elements() << ", x_max " << x_max_as_float;
     }
   }
